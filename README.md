@@ -3,13 +3,52 @@
 ## User Information
 Please fill in your information after forking this repository:
 
-- **Name**: [Your Name]
+- **Name**: Cahit Doğan
 
 ## Project Description
 [Add a brief description of your project here]
 
 ## Getting Started
-[Add instructions for setting up and running the project]
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm (v8 or higher)
+
+### Installation
+1. Clone the repository
+   ```bash
+   git clone https://github.com/cahitdogan/JotformFrontendHackathon-20.04.2025.git
+   cd JotformFrontendHackathon-20.04.2025
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+### Running the project
+- Start the development server
+   ```bash
+   npm run dev
+   ```
+
+- Build for production
+   ```bash
+   npm run build
+   ```
+
+- Preview production build
+   ```bash
+   npm run preview
+   ```
+
+### Tech Stack
+- React 19
+- TypeScript
+- Vite
+- Material UI
+- TailwindCSS
+- React Router
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
