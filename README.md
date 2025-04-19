@@ -46,7 +46,7 @@ Please fill in your information after forking this repository:
 - React 19
 - TypeScript
 - Vite
-- Material UI
+- shadcn
 - TailwindCSS
 - React Router
 
