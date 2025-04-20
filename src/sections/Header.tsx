@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from '../components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 
 interface ProductProps {
     order: number;
@@ -32,10 +32,23 @@ interface ProductProps {
 interface HeaderProps {
     shoppingCartProducts: ProductProps[];
     shoppingCartProductCounts: any;
+    onSearch?: (query: string) => void;
 }
 
-export default function Header({shoppingCartProducts, shoppingCartProductCounts}: HeaderProps) {
+export default function Header({shoppingCartProducts, shoppingCartProductCounts, onSearch}: HeaderProps) {
     const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (onSearch) {
+            onSearch(searchQuery);
+        }
+    };
 
     return (
         <header className='flex gap-3 items-center justify-between py-3 px-3 md:px-10 mb-10 fixed top-0 left-0 right-0 z-50 bg-white shadow-sm'>
@@ -53,7 +66,22 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts}
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
-            <Input type='search' className='max-w-96' />
+            
+            <form onSubmit={handleSearchSubmit} className='flex max-w-96 w-full'>
+                <Input 
+                    type='search' 
+                    className='rounded-r-none'
+                    placeholder='Search products...'
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                />
+                <Button 
+                    type="submit" 
+                    className='rounded-l-none'
+                >
+                    <Search className="h-4 w-4" />
+                </Button>
+            </form>
             
             <DropdownMenu>
                 <DropdownMenuTrigger>

@@ -28,6 +28,7 @@ interface ProductsPromps {
     shoppingCartProducts: object[];
     shoppingCartProductCounts: any;
     setShoppingCartProductCounts: any;
+    searchQuery: string;
 }
 
 export default function Products({
@@ -37,8 +38,10 @@ export default function Products({
     shoppingCartProducts,
     shoppingCartProductCounts,
     setShoppingCartProductCounts,
+    searchQuery,
 }: ProductsPromps) {
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [fullName, setFullName] = useState('');
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState(false);
@@ -53,11 +56,26 @@ export default function Products({
             }
             const data = await response.json();
             setProducts(data.content.products);
+            setFilteredProducts(data.content.products);
         }
 
         getProducts();
     }, []);
 
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setFilteredProducts(products);
+            return;
+        }
+        
+        const query = searchQuery.toLowerCase();
+        const filtered = products.filter((product: ProductProps) => 
+            product.name.toLowerCase().includes(query) || 
+            product.description.toLowerCase().includes(query)
+        );
+        
+        setFilteredProducts(filtered);
+    }, [searchQuery, products]);
 
     function openImageDialog(imageUrl:string) {
         setIsProductImageDialogVisible(true);
@@ -177,8 +195,13 @@ export default function Products({
     return (
         <>
         <section className='mt-24 flex flex-col gap-7 items-center md:flex-row md:flex-wrap md:justify-center'>
-            {
-                products.map((product: ProductProps) => {
+            {filteredProducts.length === 0 ? (
+                <div className="text-center w-full py-10">
+                    <h2 className="text-xl font-semibold">No products found</h2>
+                    <p className="text-gray-500">Try another search term</p>
+                </div>
+            ) : (
+                filteredProducts.map((product: ProductProps) => {
                     const imageUrls = JSON.parse(product.images);
                     const firstImage = imageUrls[0];
 
@@ -228,7 +251,7 @@ export default function Products({
                         </Card>
                     );
                 })
-            }
+            )}
         </section>
         <div className='bg-gray-400 h-px my-10'></div>
         <form onSubmit={handleSubmit} className='mb-10 px-2 flex flex-col items-center gap-2'>

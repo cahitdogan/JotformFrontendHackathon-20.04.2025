@@ -10,12 +10,18 @@ function App() {
   const [activeImageForDialog, setActiveImageForDialog] = useState(null);
   const [shoppingCartProducts, setShoppingCartProducts] = useState([]);
   const [shoppingCartProductCounts, setShoppingCartProductCounts] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
 
   return (
     <>
       <Header
         shoppingCartProductCounts={shoppingCartProductCounts}
         shoppingCartProducts={shoppingCartProducts}
+        onSearch={handleSearch}
       />
       <Routes>
         <Route 
@@ -30,6 +36,7 @@ function App() {
               setIsProductImageDialogVisible={setIsProductImageDialogVisible}
               isProductImageDialogVisible={isProductImageDialogVisible}
               activeImageForDialog={activeImageForDialog}
+              searchQuery={searchQuery}
             />
           } 
         />

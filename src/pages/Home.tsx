@@ -11,6 +11,7 @@ interface HomeProps {
   setIsProductImageDialogVisible: any;
   isProductImageDialogVisible: boolean;
   activeImageForDialog: string | null;
+  searchQuery: string;
 }
 
 export default function Home({
@@ -21,7 +22,8 @@ export default function Home({
   setActiveImageForDialog,
   setIsProductImageDialogVisible,
   isProductImageDialogVisible,
-  activeImageForDialog
+  activeImageForDialog,
+  searchQuery
 }: HomeProps) {
   return (
     <main className="max-w-[1300px] m-auto">
@@ -32,6 +34,7 @@ export default function Home({
         shoppingCartProducts={shoppingCartProducts}
         setActiveImageForDialog={setActiveImageForDialog}
         setIsProductImageDialogVisible={setIsProductImageDialogVisible}
+        searchQuery={searchQuery}
       />
       <ProductImageDialog 
         activeImageForDialog={activeImageForDialog}

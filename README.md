@@ -6,7 +6,7 @@ Please fill in your information after forking this repository:
 - **Name**: Cahit Doğan
 
 ## Project Description
-[Add a brief description of your project here]
+An e-commerce web application developed for the Jotform Frontend Hackathon.
 
 ## Getting Started
 
