@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router";
 import Header from "./sections/Header";
 import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import { Toaster } from "sonner";
+import { 
+  loadCartProducts, 
+  loadCartProductCounts, 
+  saveCartProducts, 
+  saveCartProductCounts 
+} from "./utils/localStorage";
 
 function App() {
   const [isProductImageDialogVisible, setIsProductImageDialogVisible] = useState(false);
   const [activeImageForDialog, setActiveImageForDialog] = useState(null);
-  const [shoppingCartProducts, setShoppingCartProducts] = useState([]);
-  const [shoppingCartProductCounts, setShoppingCartProductCounts] = useState({});
+  const [shoppingCartProducts, setShoppingCartProducts] = useState(() => loadCartProducts());
+  const [shoppingCartProductCounts, setShoppingCartProductCounts] = useState(() => loadCartProductCounts());
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Save cart data to localStorage whenever it changes
+  useEffect(() => {
+    saveCartProducts(shoppingCartProducts);
+  }, [shoppingCartProducts]);
+
+  useEffect(() => {
+    saveCartProductCounts(shoppingCartProductCounts);
+  }, [shoppingCartProductCounts]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
