@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, FormEvent } from 'react';
 import {
     Card,
     CardContent,
@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Fullscreen } from 'lucide-react';
 import { toast } from 'sonner';
+import { Input } from '@/components/ui/input';
 
 interface ProductProps {
     order: number;
@@ -37,11 +38,15 @@ export default function Products({
     setShoppingCartProductCounts,
 }: ProductsPromps) {
     const [products, setProducts] = useState([]);
+    const [fullName, setFullName] = useState('');
+    const [address, setAddress] = useState('');
+    const [loading, setLoading] = useState(false);
+    const formID = '251074186142957';
 
     useEffect(() => {
         const getProducts = async () => {
             const apiKey = import.meta.env.VITE_JOTFORM_API_KEY;
-            const response = await fetch(`https://api.jotform.com/form/251074186142957/payment-info?apiKey={${apiKey}}`);
+            const response = await fetch(`https://api.jotform.com/form/${formID}/payment-info?apiKey={${apiKey}}`);
             if (!response.ok) {
                 console.log("productlar çekilemedi.")
             }
@@ -96,8 +101,82 @@ export default function Products({
         toast("Product removed from cart.");
     }
 
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        
+        try {
+            const apiKey = import.meta.env.VITE_JOTFORM_API_KEY;
+            
+            // First, get question IDs
+            const questionsResponse = await fetch(`https://api.jotform.com/form/${formID}/questions?apiKey=${apiKey}`);
+            if (!questionsResponse.ok) {
+                throw new Error('Failed to fetch form questions');
+            }
+            
+            const questionsData = await questionsResponse.json();
+            const questions = questionsData.content;
+            
+            let nameQuestionId = '';
+            let addressQuestionId = '';
+            let productsQuestionId = '';
+            
+            // Find the question IDs for name, address and products
+            Object.keys(questions).forEach(qid => {
+                const question = questions[qid];
+                if (question.name === 'fullName' || question.text.includes('Full Name')) {
+                    nameQuestionId = qid;
+                } else if (question.name === 'address' || question.text.includes('Address')) {
+                    addressQuestionId = qid;
+                } else if (question.type === 'control_cart' || question.text.includes('Products')) {
+                    productsQuestionId = qid;
+                }
+            });
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append(`submission[${nameQuestionId}]`, fullName);
+            formData.append(`submission[${addressQuestionId}]`, address);
+            
+
+            if (productsQuestionId && shoppingCartProducts.length > 0) {
+                const cartProducts = shoppingCartProducts.map((product: any) => ({
+                    name: product.name,
+                    quantity: shoppingCartProductCounts[product.order],
+                    price: product.price.replace(/[^0-9.]/g, '')
+                }));
+                
+                formData.append(`submission[${productsQuestionId}]`, JSON.stringify(cartProducts));
+            }
+            
+
+            const submitResponse = await fetch(`https://api.jotform.com/form/${formID}/submissions?apiKey=${apiKey}`, {
+                method: 'POST',
+                body: formData,
+            });
+            
+            if (!submitResponse.ok) {
+                throw new Error('Form submission failed');
+            }
+            
+            toast('Order submitted successfully!');
+            // Reset form
+            setFullName('');
+            setAddress('');
+            setShoppingCartProducts([]);
+            setShoppingCartProductCounts({});
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            toast('Failed to submit the form. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <section className='flex flex-col gap-7 items-center md:flex-row md:flex-wrap md:justify-center'>
+        <>
+        <section className='mt-24 flex flex-col gap-7 items-center md:flex-row md:flex-wrap md:justify-center'>
             {
                 products.map((product: ProductProps) => {
                     const imageUrls = JSON.parse(product.images);
@@ -149,5 +228,32 @@ export default function Products({
                 })
             }
         </section>
+        <div className='bg-gray-400 h-px my-10'></div>
+        <form onSubmit={handleSubmit} className='mb-10 px-2 flex flex-col items-center gap-2'>
+            <label>
+                Full Name
+                <Input 
+                    className='w-80 max-w-96' 
+                    type="text" 
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                />
+            </label>
+            <label>
+                Address
+                <Input 
+                    className='w-80 max-w-96' 
+                    type="text" 
+                    required
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                />
+            </label>
+            <Button type='submit' disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit'}
+            </Button>
+        </form>
+        </>
     );
 }

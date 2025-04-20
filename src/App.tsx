@@ -16,7 +16,7 @@ function App() {
         shoppingCartProductCounts={shoppingCartProductCounts}
         shoppingCartProducts={shoppingCartProducts}
       />
-      <main>
+      <main className="max-w-[1300px] m-auto">
         <Products
           shoppingCartProductCounts={shoppingCartProductCounts}
           setShoppingCartProductCounts={setShoppingCartProductCounts}

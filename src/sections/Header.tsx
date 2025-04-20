@@ -38,7 +38,7 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts}
     const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false);
 
     return (
-        <header className='flex items-center justify-between py-3 px-10 mb-10'>
+        <header className='flex items-center justify-between py-3 px-10 mb-10 fixed top-0 left-0 right-0 z-50 bg-white shadow-sm'>
             <h1 className='text-2xl font-bold'>Shop Brand</h1>
             <NavigationMenu>
                 <NavigationMenuList>
@@ -54,9 +54,12 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts}
             
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <Button onClick={() => setIsShoppingCartOpen(!isShoppingCartOpen)}>
-                        <ShoppingCart strokeWidth={3} />
-                    </Button>
+                    <div>
+                        <Button className='relative' onClick={() => setIsShoppingCartOpen(!isShoppingCartOpen)}>
+                            <ShoppingCart strokeWidth={3} />
+                        </Button>
+                    </div>
+                    
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-96 md:w-72'>
                     <DropdownMenuLabel>Shopping Cart</DropdownMenuLabel>
