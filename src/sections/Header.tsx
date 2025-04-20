@@ -38,15 +38,18 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts}
     const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false);
 
     return (
-        <header className='flex items-center justify-between py-3 px-10 mb-10 fixed top-0 left-0 right-0 z-50 bg-white shadow-sm'>
+        <header className='flex gap-3 items-center justify-between py-3 px-3 md:px-10 mb-10 fixed top-0 left-0 right-0 z-50 bg-white shadow-sm'>
             <h1 className='text-2xl font-bold'>Shop Brand</h1>
-            <NavigationMenu>
+            <NavigationMenu className='hidden lg:block'>
                 <NavigationMenuList>
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                            <NavigationMenuLink>Link</NavigationMenuLink>
-                        </NavigationMenuContent>
+                        <NavigationMenuTrigger>Link 1</NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>Link 2</NavigationMenuTrigger>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger>Link 3</NavigationMenuTrigger>
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
@@ -77,7 +80,7 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts}
                                             <span className='font-bold'>{shoppingCartProductCounts[product.order]}</span>
                                             {product.name}
                                         </span>
-                                        <span className='font-bold'>{product.price}</span>
+                                        <span className='font-bold'>${product.price}</span>
                                     </DropdownMenuItem>
                                 );
                             })

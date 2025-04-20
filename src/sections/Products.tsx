@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Fullscreen } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router';
 
 interface ProductProps {
     order: number;
@@ -108,7 +109,6 @@ export default function Products({
         try {
             const apiKey = import.meta.env.VITE_JOTFORM_API_KEY;
             
-            // First, get question IDs
             const questionsResponse = await fetch(`https://api.jotform.com/form/${formID}/questions?apiKey=${apiKey}`);
             if (!questionsResponse.ok) {
                 throw new Error('Failed to fetch form questions');
@@ -121,7 +121,7 @@ export default function Products({
             let addressQuestionId = '';
             let productsQuestionId = '';
             
-            // Find the question IDs for name, address and products
+
             Object.keys(questions).forEach(qid => {
                 const question = questions[qid];
                 if (question.name === 'fullName' || question.text.includes('Full Name')) {
@@ -183,24 +183,26 @@ export default function Products({
                     const firstImage = imageUrls[0];
 
                     return (
-                        <Card key={product.order} className='w-72 gap-5 relative '>
+                        <Card key={product.order} className='w-72 gap-5 relative'>
                             <Button 
                                 onClick={ () => openImageDialog(firstImage) }
-                                className='absolute right-3 top-8 rounded-full w-10 h-10 hover:w-12 hover:h-12'>
+                                className='absolute right-3 top-8 rounded-full w-10 h-10 hover:w-12 hover:h-12 z-10'>
                                 <Fullscreen />
                             </Button>
-                            <img
-                                className='h-60 object-cover'
-                                src={firstImage}
-                                alt={product.description}
-                            />
-                            <CardHeader className='h-16'>
-                                <CardTitle>{product.name}</CardTitle>
-                                <CardDescription>{product.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className='font-bold text-xl'>{product.price}</p>
-                            </CardContent>
+                            <Link to={`/product/${product.order}`} className="cursor-pointer block flex flex-col gap-4">
+                                <img
+                                    className='h-60 object-cover block w-full mb-4'
+                                    src={firstImage}
+                                    alt={product.description}
+                                />
+                                <CardHeader className='h-16'>
+                                    <CardTitle>{product.name}</CardTitle>
+                                    <CardDescription>{product.description}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className='font-bold text-xl'>${product.price}</p>
+                                </CardContent>
+                            </Link>
                             <CardFooter className='flex justify-around gap-2'>
                                 {
                                     !shoppingCartProductCounts[product.order]
@@ -230,6 +232,12 @@ export default function Products({
         </section>
         <div className='bg-gray-400 h-px my-10'></div>
         <form onSubmit={handleSubmit} className='mb-10 px-2 flex flex-col items-center gap-2'>
+            <p className="font-bold text-xl">Total Cost: $
+                {shoppingCartProducts.reduce((total: number, product: any) => {
+                    const price = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+                    return total + (price * shoppingCartProductCounts[product.order]);
+                }, 0).toFixed(2)}
+            </p>
             <label>
                 Full Name
                 <Input 

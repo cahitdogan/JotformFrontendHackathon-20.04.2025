@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
+import { Routes, Route } from "react-router";
 import Header from "./sections/Header";
-import Products from "./sections/Products";
-import ProductImageDialog from "./sections/ProductImageDialog";
+import Home from "./pages/Home";
+import ProductDetail from "./pages/ProductDetail";
 import { Toaster } from "sonner";
 
 function App() {
@@ -16,24 +17,39 @@ function App() {
         shoppingCartProductCounts={shoppingCartProductCounts}
         shoppingCartProducts={shoppingCartProducts}
       />
-      <main className="max-w-[1300px] m-auto">
-        <Products
-          shoppingCartProductCounts={shoppingCartProductCounts}
-          setShoppingCartProductCounts={setShoppingCartProductCounts}
-          setShoppingCartProducts={setShoppingCartProducts}
-          shoppingCartProducts={shoppingCartProducts}
-          setActiveImageForDialog={setActiveImageForDialog}
-          setIsProductImageDialogVisible={setIsProductImageDialogVisible}
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <Home
+              shoppingCartProductCounts={shoppingCartProductCounts}
+              setShoppingCartProductCounts={setShoppingCartProductCounts}
+              setShoppingCartProducts={setShoppingCartProducts}
+              shoppingCartProducts={shoppingCartProducts}
+              setActiveImageForDialog={setActiveImageForDialog}
+              setIsProductImageDialogVisible={setIsProductImageDialogVisible}
+              isProductImageDialogVisible={isProductImageDialogVisible}
+              activeImageForDialog={activeImageForDialog}
+            />
+          } 
         />
-        <ProductImageDialog 
-          activeImageForDialog={activeImageForDialog}
-          isVisible={isProductImageDialogVisible}
-          setIsProductImageDialogVisible={setIsProductImageDialogVisible}
+        <Route 
+          path="/product/:productId" 
+          element={
+            <ProductDetail
+              shoppingCartProductCounts={shoppingCartProductCounts}
+              setShoppingCartProductCounts={setShoppingCartProductCounts}
+              setShoppingCartProducts={setShoppingCartProducts}
+              shoppingCartProducts={shoppingCartProducts}
+              setActiveImageForDialog={setActiveImageForDialog}
+              setIsProductImageDialogVisible={setIsProductImageDialogVisible}
+            />
+          } 
         />
-      </main>
+      </Routes>
       <Toaster />
     </>
-  )
+  );
 }
 
 export default App;
