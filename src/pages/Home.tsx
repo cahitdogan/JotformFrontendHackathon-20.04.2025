@@ -1,4 +1,3 @@
-import React from 'react';
 import Products from '../sections/Products';
 import ProductImageDialog from '../sections/ProductImageDialog';
 

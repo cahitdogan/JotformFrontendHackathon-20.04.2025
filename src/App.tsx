@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router";
 import Header from "./sections/Header";
 import Home from "./pages/Home";
@@ -18,7 +18,6 @@ function App() {
   const [shoppingCartProductCounts, setShoppingCartProductCounts] = useState(() => loadCartProductCounts());
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Save cart data to localStorage whenever it changes
   useEffect(() => {
     saveCartProducts(shoppingCartProducts);
   }, [shoppingCartProducts]);
