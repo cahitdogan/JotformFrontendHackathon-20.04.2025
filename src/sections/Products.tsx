@@ -6,7 +6,14 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
+
+interface ProductProps {
+    order: number;
+    name: string;
+    images: string;
+    description: string;
+}
 
 export default function Products() {
     const [products, setProducts] = useState([]);
@@ -26,14 +33,21 @@ export default function Products() {
     }, []);
 
     return (
-        <section>
+        <section className='flex flex-col gap-7 items-center md:flex-row md:flex-wrap md:justify-center'>
             {
-                products.map(product => {
+                products.map((product: ProductProps) => {
+                    const imageUrls = JSON.parse(product.images);
+                    const firstImage = imageUrls[0];
+
                     return (
-                        <Card key={product.order}>
-                            <img src={""} alt="" />
+                        <Card key={product.order} className='h-min w-72'>
+                            <img
+                                className='h-60 object-cover'
+                                src={firstImage}
+                                alt={product.description}
+                            />
                             <CardHeader>
-                                <CardTitle>product.name</CardTitle>
+                                <CardTitle>{product.name}</CardTitle>
                                 <CardDescription>Card Description</CardDescription>
                             </CardHeader>
                             <CardContent>
