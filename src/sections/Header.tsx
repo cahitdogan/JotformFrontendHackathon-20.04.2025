@@ -93,7 +93,20 @@ export default function Header({shoppingCartProducts, shoppingCartProductCounts,
                     
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-96 md:w-72'>
-                    <DropdownMenuLabel>Shopping Cart</DropdownMenuLabel>
+                    <DropdownMenuLabel className='flex justify-between'>
+                        <span>
+                            Shopping Cart
+                        </span>
+                        <span className='font-black'>
+                            $
+                            {
+                                shoppingCartProducts.reduce((total: number, product: any) => {
+                                const price = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+                                return total + (price * shoppingCartProductCounts[product.order]);
+                                }, 0).toFixed(2)
+                            }
+                        </span>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {
                         shoppingCartProducts.length === 0 ? (
