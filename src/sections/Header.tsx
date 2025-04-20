@@ -21,11 +21,23 @@ import { Input } from '../components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 
-export default function Header() {
+interface ProductProps {
+    order: number;
+    name: string;
+    images: string;
+    description: string;
+    price: string;
+}
+
+interface HeaderProps {
+    shoppingCartProducts: ProductProps[];
+}
+
+export default function Header({shoppingCartProducts}: HeaderProps) {
     const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false);
 
     return (
-        <header className='flex items-center justify-between p-2'>
+        <header className='flex items-center justify-between py-3 px-10 mb-10'>
             <h1 className='text-2xl font-bold'>Shop Brand</h1>
             <NavigationMenu>
                 <NavigationMenuList>
@@ -48,7 +60,22 @@ export default function Header() {
                 <DropdownMenuContent className='w-96 md:w-72'>
                     <DropdownMenuLabel>Shopping Cart</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    
+                    {
+                        shoppingCartProducts.length === 0 ? (
+                            <DropdownMenuItem disabled>
+                                There are no products in the cart.
+                            </DropdownMenuItem>
+                        ) : (
+                            shoppingCartProducts.map((product:ProductProps) => {
+                                return (
+                                    <DropdownMenuItem className='flex justify-between' key={product.order}>
+                                        {product.name}
+                                        <span className='font-bold'>{product.price}</span>
+                                    </DropdownMenuItem>
+                                );
+                            })
+                        )
+                    }
                 </DropdownMenuContent>
             </DropdownMenu>
         </header>

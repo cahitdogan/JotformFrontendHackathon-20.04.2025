@@ -2,16 +2,22 @@ import React, { useState } from "react"
 import Header from "./sections/Header";
 import Products from "./sections/Products";
 import ProductImageDialog from "./sections/ProductImageDialog";
+import { Toaster } from "sonner";
 
 function App() {
   const [isProductImageDialogVisible, setIsProductImageDialogVisible] = useState(false);
   const [activeImageForDialog, setActiveImageForDialog] = useState(null);
+  const [shoppingCartProducts, setShoppingCartProducts] = useState([]);
 
   return (
     <>
-      <Header/>
+      <Header
+        shoppingCartProducts={shoppingCartProducts}
+      />
       <main>
         <Products
+          setShoppingCartProducts={setShoppingCartProducts}
+          shoppingCartProducts={shoppingCartProducts}
           setActiveImageForDialog={setActiveImageForDialog}
           setIsProductImageDialogVisible={setIsProductImageDialogVisible}
         />
@@ -21,6 +27,7 @@ function App() {
           setIsProductImageDialogVisible={setIsProductImageDialogVisible}
         />
       </main>
+      <Toaster />
     </>
   )
 }

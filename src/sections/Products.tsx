@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Fullscreen } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ProductProps {
     order: number;
@@ -21,9 +22,16 @@ interface ProductProps {
 interface ProductsPromps {
     setIsProductImageDialogVisible: any;
     setActiveImageForDialog: any;
+    setShoppingCartProducts: any;
+    shoppingCartProducts: object[]
 }
 
-export default function Products({setIsProductImageDialogVisible, setActiveImageForDialog}: ProductsPromps) {
+export default function Products({
+    setIsProductImageDialogVisible,
+    setActiveImageForDialog,
+    setShoppingCartProducts,
+    shoppingCartProducts
+}: ProductsPromps) {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -40,9 +48,15 @@ export default function Products({setIsProductImageDialogVisible, setActiveImage
         getProducts();
     }, []);
 
+
     function openImageDialog(imageUrl:string) {
         setIsProductImageDialogVisible(true);
         setActiveImageForDialog(imageUrl);
+    }
+
+    function addProductToCart(product:ProductProps) {
+        setShoppingCartProducts([...shoppingCartProducts, product]);
+        toast("Product successfully added to cart.");
     }
 
     return (
@@ -72,7 +86,7 @@ export default function Products({setIsProductImageDialogVisible, setActiveImage
                                 <p className='font-bold text-xl'>{product.price}</p>
                             </CardContent>
                             <CardFooter className='flex justify-around gap-2'>
-                                <Button className='w-1/2'>Add to Cart</Button>
+                                <Button className='w-1/2' onClick={()=>addProductToCart(product)}>Add to Cart</Button>
                                 <Button className='w-1/2' variant={"outline"}>Favorite</Button>
                             </CardFooter>
                         </Card>
