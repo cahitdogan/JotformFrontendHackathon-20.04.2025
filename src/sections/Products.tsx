@@ -7,12 +7,15 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Fullscreen } from 'lucide-react';
 
 interface ProductProps {
     order: number;
     name: string;
     images: string;
     description: string;
+    price: string;
 }
 
 export default function Products() {
@@ -40,21 +43,25 @@ export default function Products() {
                     const firstImage = imageUrls[0];
 
                     return (
-                        <Card key={product.order} className='h-min w-72'>
+                        <Card key={product.order} className='w-72 gap-5 relative '>
+                            <Button className='absolute right-3 top-8 rounded-full w-10 h-10 hover:w-12 hover:h-12'>
+                                <Fullscreen />
+                            </Button>
                             <img
                                 className='h-60 object-cover'
                                 src={firstImage}
                                 alt={product.description}
                             />
-                            <CardHeader>
+                            <CardHeader className='h-16'>
                                 <CardTitle>{product.name}</CardTitle>
-                                <CardDescription>Card Description</CardDescription>
+                                <CardDescription>{product.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <p>Card Content</p>
+                                <p className='font-bold text-xl'>{product.price}</p>
                             </CardContent>
-                            <CardFooter>
-                                <p>Card Footer</p>
+                            <CardFooter className='flex justify-around gap-2'>
+                                <Button className='w-1/2'>Add to Card</Button>
+                                <Button className='w-1/2' variant={"outline"}>Favorite</Button>
                             </CardFooter>
                         </Card>
                     );
