@@ -18,7 +18,12 @@ interface ProductProps {
     price: string;
 }
 
-export default function Products() {
+interface ProductsPromps {
+    setIsProductImageDialogVisible: any;
+    setActiveImageForDialog: any;
+}
+
+export default function Products({setIsProductImageDialogVisible, setActiveImageForDialog}: ProductsPromps) {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -35,6 +40,11 @@ export default function Products() {
         getProducts();
     }, []);
 
+    function openImageDialog(imageUrl:string) {
+        setIsProductImageDialogVisible(true);
+        setActiveImageForDialog(imageUrl);
+    }
+
     return (
         <section className='flex flex-col gap-7 items-center md:flex-row md:flex-wrap md:justify-center'>
             {
@@ -44,7 +54,9 @@ export default function Products() {
 
                     return (
                         <Card key={product.order} className='w-72 gap-5 relative '>
-                            <Button className='absolute right-3 top-8 rounded-full w-10 h-10 hover:w-12 hover:h-12'>
+                            <Button 
+                                onClick={ () => openImageDialog(firstImage) }
+                                className='absolute right-3 top-8 rounded-full w-10 h-10 hover:w-12 hover:h-12'>
                                 <Fullscreen />
                             </Button>
                             <img
