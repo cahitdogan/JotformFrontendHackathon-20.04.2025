@@ -23,14 +23,18 @@ interface ProductsPromps {
     setIsProductImageDialogVisible: any;
     setActiveImageForDialog: any;
     setShoppingCartProducts: any;
-    shoppingCartProducts: object[]
+    shoppingCartProducts: object[];
+    shoppingCartProductCounts: any;
+    setShoppingCartProductCounts: any;
 }
 
 export default function Products({
     setIsProductImageDialogVisible,
     setActiveImageForDialog,
     setShoppingCartProducts,
-    shoppingCartProducts
+    shoppingCartProducts,
+    shoppingCartProductCounts,
+    setShoppingCartProductCounts,
 }: ProductsPromps) {
     const [products, setProducts] = useState([]);
 
@@ -55,8 +59,41 @@ export default function Products({
     }
 
     function addProductToCart(product:ProductProps) {
-        setShoppingCartProducts([...shoppingCartProducts, product]);
+        const productExists = shoppingCartProducts.some((item: any) => item.order === product.order);
+        
+        if (productExists) {
+            setShoppingCartProductCounts((prev:any) => ({
+                ...prev,
+                [product.order]: (prev[product.order] || 0) + 1
+            }));
+        } else {
+            setShoppingCartProducts([...shoppingCartProducts, product]);
+            setShoppingCartProductCounts((prev:any) => ({
+                ...prev,
+                [product.order]: 1
+            }));
+        }
+        
         toast("Product successfully added to cart.");
+    }
+
+    function removeProductFromCart(product:ProductProps) {
+        if (shoppingCartProductCounts[product.order] > 1) {
+            setShoppingCartProductCounts((prev:any) => ({
+                ...prev,
+                [product.order]: prev[product.order] - 1
+            }));
+        } else {
+            // Remove product completely when count reaches 0
+            setShoppingCartProducts(shoppingCartProducts.filter((item: any) => item.order !== product.order));
+            setShoppingCartProductCounts((prev:any) => {
+                const newCounts = { ...prev };
+                delete newCounts[product.order];
+                return newCounts;
+            });
+        }
+        
+        toast("Product removed from cart.");
     }
 
     return (
@@ -86,7 +123,25 @@ export default function Products({
                                 <p className='font-bold text-xl'>{product.price}</p>
                             </CardContent>
                             <CardFooter className='flex justify-around gap-2'>
-                                <Button className='w-1/2' onClick={()=>addProductToCart(product)}>Add to Cart</Button>
+                                {
+                                    !shoppingCartProductCounts[product.order]
+                                    ?
+                                    <Button className='w-1/2' onClick={()=>addProductToCart(product)}>Add to Cart</Button>
+                                    : (
+                                    <div className='flex gap-1'>
+                                        <Button className='w-1/6 cursor-none'>
+                                            {shoppingCartProductCounts[product.order]}
+                                        </Button>
+                                        <Button variant={'outline'} className='w-1/6' onClick={()=>addProductToCart(product)}>
+                                            +
+                                        </Button>
+                                        <Button variant={'outline'} className='w-1/6' onClick={()=>removeProductFromCart(product)}>
+                                            -
+                                        </Button>
+                                    </div>
+                                    )
+                                }
+                                
                                 <Button className='w-1/2' variant={"outline"}>Favorite</Button>
                             </CardFooter>
                         </Card>

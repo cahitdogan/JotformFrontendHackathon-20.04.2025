@@ -8,14 +8,18 @@ function App() {
   const [isProductImageDialogVisible, setIsProductImageDialogVisible] = useState(false);
   const [activeImageForDialog, setActiveImageForDialog] = useState(null);
   const [shoppingCartProducts, setShoppingCartProducts] = useState([]);
+  const [shoppingCartProductCounts, setShoppingCartProductCounts] = useState({});
 
   return (
     <>
       <Header
+        shoppingCartProductCounts={shoppingCartProductCounts}
         shoppingCartProducts={shoppingCartProducts}
       />
       <main>
         <Products
+          shoppingCartProductCounts={shoppingCartProductCounts}
+          setShoppingCartProductCounts={setShoppingCartProductCounts}
           setShoppingCartProducts={setShoppingCartProducts}
           shoppingCartProducts={shoppingCartProducts}
           setActiveImageForDialog={setActiveImageForDialog}

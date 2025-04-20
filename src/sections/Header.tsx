@@ -31,9 +31,10 @@ interface ProductProps {
 
 interface HeaderProps {
     shoppingCartProducts: ProductProps[];
+    shoppingCartProductCounts: any;
 }
 
-export default function Header({shoppingCartProducts}: HeaderProps) {
+export default function Header({shoppingCartProducts, shoppingCartProductCounts}: HeaderProps) {
     const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false);
 
     return (
@@ -69,7 +70,10 @@ export default function Header({shoppingCartProducts}: HeaderProps) {
                             shoppingCartProducts.map((product:ProductProps) => {
                                 return (
                                     <DropdownMenuItem className='flex justify-between' key={product.order}>
-                                        {product.name}
+                                        <span className='flex gap-2'>
+                                            <span className='font-bold'>{shoppingCartProductCounts[product.order]}</span>
+                                            {product.name}
+                                        </span>
                                         <span className='font-bold'>{product.price}</span>
                                     </DropdownMenuItem>
                                 );
