@@ -72,7 +72,7 @@ export default function Products({setIsProductImageDialogVisible, setActiveImage
                                 <p className='font-bold text-xl'>{product.price}</p>
                             </CardContent>
                             <CardFooter className='flex justify-around gap-2'>
-                                <Button className='w-1/2'>Add to Card</Button>
+                                <Button className='w-1/2'>Add to Cart</Button>
                                 <Button className='w-1/2' variant={"outline"}>Favorite</Button>
                             </CardFooter>
                         </Card>
