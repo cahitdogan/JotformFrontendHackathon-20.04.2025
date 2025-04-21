@@ -1,20 +1,14 @@
 import { useState } from 'react';
 import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
     Sheet,
     SheetContent,
     SheetHeader,
     SheetTitle,
     SheetFooter,
     SheetTrigger,
-} from "@/components/ui/sheet";
+} from "../components/ui/sheet";
 import { Input } from '../components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Button } from '../components/ui/button';
 import { ShoppingCart, Search, Heart, PlusCircle, MinusCircle, Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';

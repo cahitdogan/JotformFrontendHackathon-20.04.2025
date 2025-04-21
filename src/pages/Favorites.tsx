@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import {
     Card,
     CardContent,
@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Fullscreen, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router';
-import ProductImageDialog from '@/components/ProductImageDialog';
 
 interface ProductProps {
     order: number;
@@ -42,9 +41,6 @@ export default function Favorites({
     setIsProductImageDialogVisible,
     setActiveImageForDialog
 }: FavoritesProps) {
-    const [isProductImageDialogVisible, setLocalIsProductImageDialogVisible] = useState(false);
-    const [activeImageForDialog, setLocalActiveImageForDialog] = useState(null);
-
     function openImageDialog(imageUrl: string) {
         setIsProductImageDialogVisible(true);
         setActiveImageForDialog(imageUrl);
