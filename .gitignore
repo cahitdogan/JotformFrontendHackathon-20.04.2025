@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 node_modules
 .env
+notes/notes.md
+notes/notes.js
+test.json

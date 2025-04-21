@@ -6,6 +6,8 @@ interface HomeProps {
   setShoppingCartProductCounts: any;
   setShoppingCartProducts: any;
   shoppingCartProducts: object[];
+  favoriteProducts: any[];
+  setFavoriteProducts: any;
   setActiveImageForDialog: any;
   setIsProductImageDialogVisible: any;
   isProductImageDialogVisible: boolean;
@@ -18,6 +20,8 @@ export default function Home({
   setShoppingCartProductCounts,
   setShoppingCartProducts,
   shoppingCartProducts,
+  favoriteProducts,
+  setFavoriteProducts,
   setActiveImageForDialog,
   setIsProductImageDialogVisible,
   isProductImageDialogVisible,
@@ -31,6 +35,8 @@ export default function Home({
         setShoppingCartProductCounts={setShoppingCartProductCounts}
         setShoppingCartProducts={setShoppingCartProducts}
         shoppingCartProducts={shoppingCartProducts}
+        favoriteProducts={favoriteProducts}
+        setFavoriteProducts={setFavoriteProducts}
         setActiveImageForDialog={setActiveImageForDialog}
         setIsProductImageDialogVisible={setIsProductImageDialogVisible}
         searchQuery={searchQuery}

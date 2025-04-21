@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { Fullscreen, ArrowLeft } from 'lucide-react';
+import { Fullscreen, ArrowLeft, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProductProps {
@@ -17,6 +17,8 @@ interface ProductDetailProps {
   shoppingCartProducts: object[];
   shoppingCartProductCounts: any;
   setShoppingCartProductCounts: any;
+  favoriteProducts: ProductProps[];
+  setFavoriteProducts: any;
   setIsProductImageDialogVisible: any;
   setActiveImageForDialog: any;
 }
@@ -26,6 +28,8 @@ export default function ProductDetail({
   shoppingCartProducts,
   shoppingCartProductCounts,
   setShoppingCartProductCounts,
+  favoriteProducts,
+  setFavoriteProducts,
   setIsProductImageDialogVisible,
   setActiveImageForDialog,
 }: ProductDetailProps) {
@@ -106,6 +110,22 @@ export default function ProductDetail({
     toast("Product removed from cart.");
   }
 
+  function toggleFavorite(product: ProductProps) {
+    const isProductFavorite = favoriteProducts.some((item: any) => item.order === product.order);
+    
+    if (isProductFavorite) {
+      setFavoriteProducts(favoriteProducts.filter((item: any) => item.order !== product.order));
+      toast("Product removed from favorites.");
+    } else {
+      setFavoriteProducts([...favoriteProducts, product]);
+      toast("Product added to favorites.");
+    }
+  }
+
+  function isProductFavorite(productOrder: number) {
+    return favoriteProducts.some((item: any) => item.order === productOrder);
+  }
+
   if (loading) {
     return <div className="flex justify-center items-center h-screen mt-16">Loading...</div>;
   }
@@ -115,6 +135,7 @@ export default function ProductDetail({
   }
 
   const imageUrls = JSON.parse(product.images);
+  const isFavorite = isProductFavorite(product.order);
 
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
@@ -162,24 +183,35 @@ export default function ProductDetail({
             <p className="text-gray-700">{product.description}</p>
           </div>
           
-          <div className="mt-8">
-            {!shoppingCartProductCounts[product.order] ? (
-              <Button className="w-full" onClick={() => addProductToCart(product)}>
-                Add to Cart
-              </Button>
-            ) : (
-              <div className="flex gap-4 items-center">
-                <span className="font-medium">Quantity: {shoppingCartProductCounts[product.order]}</span>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => addProductToCart(product)}>
-                    +
-                  </Button>
-                  <Button variant="outline" onClick={() => removeProductFromCart(product)}>
-                    -
-                  </Button>
+          <div className="mt-8 flex flex-col gap-4">
+            <div className="flex gap-2">
+              {!shoppingCartProductCounts[product.order] ? (
+                <Button className="w-full" onClick={() => addProductToCart(product)}>
+                  Add to Cart
+                </Button>
+              ) : (
+                <div className="flex gap-4 items-center">
+                  <span className="font-medium">Quantity: {shoppingCartProductCounts[product.order]}</span>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => addProductToCart(product)}>
+                      +
+                    </Button>
+                    <Button variant="outline" onClick={() => removeProductFromCart(product)}>
+                      -
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+            
+            <Button
+              onClick={() => toggleFavorite(product)}
+              variant={isFavorite ? "default" : "outline"}
+              className="flex items-center justify-center gap-2"
+            >
+              <Heart className={isFavorite ? "fill-white" : ""} />
+              {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+            </Button>
           </div>
         </div>
       </div>

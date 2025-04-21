@@ -3,7 +3,8 @@
 // Keys for localStorage
 export const STORAGE_KEYS = {
   CART_PRODUCTS: 'cartProducts',
-  CART_PRODUCT_COUNTS: 'cartProductCounts'
+  CART_PRODUCT_COUNTS: 'cartProductCounts',
+  FAVORITE_PRODUCTS: 'favoriteProducts'
 };
 
 // Save cart products to localStorage
@@ -43,5 +44,25 @@ export const loadCartProductCounts = (): Record<string, number> => {
   } catch (error) {
     console.error('Error loading cart product counts from localStorage:', error);
     return {};
+  }
+};
+
+// Save favorite products to localStorage
+export const saveFavoriteProducts = (products: any[]) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.FAVORITE_PRODUCTS, JSON.stringify(products));
+  } catch (error) {
+    console.error('Error saving favorite products to localStorage:', error);
+  }
+};
+
+// Load favorite products from localStorage
+export const loadFavoriteProducts = (): any[] => {
+  try {
+    const products = localStorage.getItem(STORAGE_KEYS.FAVORITE_PRODUCTS);
+    return products ? JSON.parse(products) : [];
+  } catch (error) {
+    console.error('Error loading favorite products from localStorage:', error);
+    return [];
   }
 }; 
